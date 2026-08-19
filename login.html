@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enter — Birthday Surprise 💌</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink: #f48fb1;
+      --rose: #e91e8c;
+      --gold: #d4af7a;
+      --deep: #8b1a5c;
+      --glass-bg: rgba(255, 240, 248, 0.12);
+      --glass-border: rgba(244, 143, 177, 0.35);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      background: #120008;
+      animation: pageIn 0.7s ease forwards;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Background ── */
+    .bg {
+      position: fixed; inset: 0;
+      background-image: url('assets/login_bg.png');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4) saturate(1.4);
+      z-index: 0;
+    }
+
+    /* animated gradient overlay */
+    .bg-overlay {
+      position: fixed; inset: 0; z-index: 1;
+      background: linear-gradient(
+        135deg,
+        rgba(139,26,92,0.35) 0%,
+        rgba(233,30,140,0.15) 40%,
+        rgba(212,175,122,0.1) 100%
+      );
+      animation: shiftGrad 10s ease-in-out infinite alternate;
+    }
+    @keyframes shiftGrad {
+      from { opacity: 0.7; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Particles ── */
+    .particle { position: fixed; pointer-events: none; z-index: 2; animation: floatUp linear infinite; opacity: 0; }
+    @keyframes floatUp {
+      0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      8%   { opacity: 0.7; }
+      92%  { opacity: 0.5; }
+      100% { transform: translateY(-10vh) rotate(540deg); opacity: 0; }
+    }
+    .star { position: fixed; pointer-events: none; z-index: 2; animation: twinkle ease-in-out infinite; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.4); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* ── Glass login card ── */
+    .card-wrap {
+      position: relative; z-index: 10;
+      width: clamp(320px, 90vw, 480px);
+      animation: riseIn 1s cubic-bezier(.34,1.56,.64,1) 0.2s forwards;
+      opacity: 0;
+    }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(50px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(28px) saturate(1.8);
+      -webkit-backdrop-filter: blur(28px) saturate(1.8);
+      border-radius: 28px;
+      padding: 48px 42px 44px;
+      box-shadow:
+        0 30px 80px rgba(233,30,140,0.25),
+        0 0 0 1px rgba(255,255,255,0.08) inset,
+        0 1px 0 rgba(255,255,255,0.2) inset;
+    }
+
+    /* top envelope icon */
+    .envelope-icon {
+      text-align: center;
+      font-size: 3.2rem;
+      margin-bottom: 8px;
+      animation: envelopeBounce 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 16px rgba(233,30,140,0.7));
+    }
+    @keyframes envelopeBounce {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .card-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 0 24px rgba(244,143,177,0.8), 0 0 48px rgba(244,143,177,0.4);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .card-sub {
+      text-align: center;
+      font-size: 0.82rem;
+      color: rgba(255,200,230,0.7);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+
+    /* divider */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(244,143,177,0.5), transparent);
+    }
+    .divider span { font-size: 1rem; color: var(--pink); }
+
+    /* form */
+    .field {
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .field label {
+      display: block;
+      font-size: 0.76rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,200,230,0.75);
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+    .field input {
+      width: 100%;
+      background: rgba(255,240,248,0.08);
+      border: 1.5px solid rgba(244,143,177,0.3);
+      border-radius: 14px;
+      padding: 14px 18px 14px 46px;
+      font-size: 0.95rem;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    .field input::placeholder { color: rgba(255,200,230,0.35); }
+    .field input:focus {
+      border-color: var(--rose);
+      background: rgba(255,240,248,0.14);
+      box-shadow: 0 0 0 4px rgba(233,30,140,0.12), 0 0 20px rgba(233,30,140,0.2);
+    }
+    .field .icon {
+      position: absolute;
+      left: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 1.1rem;
+      pointer-events: none;
+      padding-top: 14px; /* offset for label */
+    }
+
+    /* input shake error */
+    .field.shake input { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* CTA button */
+    .btn-wrap { margin-top: 28px; position: relative; }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #e91e8c 0%, #c2185b 50%, #d4af7a 100%);
+      background-size: 200% 200%;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 8px 30px rgba(233,30,140,0.45);
+      animation: gradShift 4s ease infinite;
+    }
+    @keyframes gradShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(233,30,140,0.6);
+    }
+    .btn:active { transform: translateY(0); }
+
+    .btn .btn-text { position: relative; z-index: 1; }
+    /* shimmer */
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::after { left: 140%; }
+
+    /* loading state */
+    .btn.loading .btn-text { opacity: 0; }
+    .btn.loading::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      width: 22px; height: 22px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* error message */
+    .error-msg {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #ff8fab;
+      letter-spacing: 0.5px;
+      min-height: 20px;
+      transition: opacity 0.3s;
+    }
+
+    /* back link */
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: rgba(255,200,230,0.55);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--pink); }
+
+    /* ── Success overlay ── */
+    .success-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(20,0,12,0);
+      pointer-events: none;
+      transition: background 0.5s;
+    }
+    .success-overlay.show { background: rgba(20,0,12,0.5); pointer-events: all; }
+    .success-burst {
+      font-size: 6rem;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.6s cubic-bezier(.34,1.56,.64,1);
+    }
+    .success-overlay.show .success-burst { opacity: 1; transform: scale(1); }
+    .success-msg {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(244,143,177,1);
+      opacity: 0;
+      transition: opacity 0.5s 0.4s;
+      margin-top: 16px;
+    }
+    .success-overlay.show .success-msg { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="bg-overlay"></div>
+
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-burst">🎉</div>
+    <div class="success-msg">Welcome, My Love!</div>
+  </div>
+
+  <div class="card-wrap">
+    <div class="glass-card">
+
+      <div class="envelope-icon">💌</div>
+      <h1 class="card-title">Open Your Surprise</h1>
+      <p class="card-sub">✦ Just for you ✦</p>
+
+      <div class="divider"><span>🌹</span></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" autocomplete="off">
+
+        <div class="field" id="nameField">
+          <label for="nameInput">Your Name</label>
+          <span class="icon">👩</span>
+          <input type="text" id="nameInput" placeholder="What's your name, princess?" />
+        </div>
+
+        <div class="field" id="passwordField">
+          <label for="passwordInput">Secret Passphrase</label>
+          <span class="icon">🔑</span>
+          <input type="password" id="passwordInput" placeholder="Enter our special word…" />
+        </div>
+
+        <div class="btn-wrap">
+          <button class="btn" id="enterBtn" type="submit">
+            <span class="btn-text">Open My Gift 🎁</span>
+          </button>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+      </form>
+
+      <a href="index.html" class="back-link">← Go Back</a>
+
+    </div>
+  </div>
+
+  <script>
+    /* ── Secret credentials — change these! ── */
+    const SECRET_NAME = 'to2i';  // username (lowercase)
+    const SECRET_PASS = '123';      // password (lowercase)
+
+    /* ── Particles ── */
+    const emojis = ['🌸','💕','✨','💫','🌹','💗','⭐','🌷'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        font-size: ${0.7 + Math.random() * 1.2}rem;
+        animation-duration: ${7 + Math.random() * 10}s;
+        animation-delay: ${-Math.random() * 15}s;
+      `;
+      document.body.appendChild(p);
+    }
+    for (let i = 0; i < 35; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.textContent = '✦';
+      s.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        top: ${Math.random() * 100}vh;
+        font-size: ${0.25 + Math.random() * 0.6}rem;
+        color: rgba(255,200,230,${0.3 + Math.random() * 0.7});
+        animation-duration: ${2 + Math.random() * 4}s;
+        animation-delay: ${-Math.random() * 4}s;
+      `;
+      document.body.appendChild(s);
+    }
+
+    /* ── Login logic ── */
+    function handleLogin(e) {
+      e.preventDefault();
+      const nameVal = document.getElementById('nameInput').value.trim().toLowerCase();
+      const passVal = document.getElementById('passwordInput').value.trim().toLowerCase();
+      const btn     = document.getElementById('enterBtn');
+      const errMsg  = document.getElementById('errorMsg');
+      const nameF   = document.getElementById('nameField');
+      const passF   = document.getElementById('passwordField');
+
+      errMsg.textContent = '';
+      nameF.classList.remove('shake');
+      passF.classList.remove('shake');
+
+      btn.classList.add('loading');
+
+      setTimeout(() => {
+        btn.classList.remove('loading');
+
+        if (nameVal !== SECRET_NAME && passVal !== SECRET_PASS) {
+          void nameF.offsetWidth; nameF.classList.add('shake');
+          void passF.offsetWidth; passF.classList.add('shake');
+          errMsg.textContent = '💔 Hmm, that doesn\'t seem right… try again, my love!';
+          return;
+        }
+        if (nameVal !== SECRET_NAME) {
+          void nameF.offsetWidth; nameF.classList.add('shake');
+          errMsg.textContent = '🤔 I don\'t recognise that name… who are you? 😄';
+          return;
+        }
+        if (passVal !== SECRET_PASS) {
+          void passF.offsetWidth; passF.classList.add('shake');
+          errMsg.textContent = '🔐 That\'s not our word… think harder, princess! 💕';
+          return;
+        }
+
+        /* ── Success! ── */
+        document.getElementById('successOverlay').classList.add('show');
+
+        /* burst confetti */
+        for (let i = 0; i < 20; i++) {
+          const c = document.createElement('div');
+          c.className = 'particle';
+          c.textContent = ['🎉','🎊','💖','✨','🌟','🥳'][Math.floor(Math.random() * 6)];
+          c.style.cssText = `
+            left: ${20 + Math.random() * 60}vw;
+            font-size: ${1.2 + Math.random() * 2}rem;
+            animation-duration: ${3 + Math.random() * 3}s;
+            animation-delay: 0s;
+          `;
+          document.body.appendChild(c);
+        }
+
+        setTimeout(() => {
+          window.location.href = 'surprise.html';
+        }, 2200);
+
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
